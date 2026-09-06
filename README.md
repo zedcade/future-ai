@@ -4,6 +4,8 @@ An interactive, browser-based scenario explorer for thinking through possible AI
 
 > **Not a forecast.** This is a transparent, bounded scenario model. It supports comparisons between optimistic, baseline, pessimistic, and custom assumptions; it does not predict AGI dates or provide a basis for operational, investment, safety, or regulatory decisions.
 
+Try it here: https://zedcade.github.io/future-ai/
+
 ## Overview
 
 The simulator makes assumptions explicit and shows their consequences across linked charts. It is designed for questions such as:
