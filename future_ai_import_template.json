@@ -1,0 +1,1209 @@
+{
+  "schema_version": 2,
+  "description": "future_ai dataset. Every section is optional in an import: omitted keys keep their current value, objects merge, arrays replace. Text fields accept tokens: {anchor_year}, {anchor_year+N}, {end_year}, {anchor:<anchor id>}, {param:<slider id>}.",
+  "model": {
+    "anchor_year": 2026,
+    "horizon_years": 24,
+    "min_history_year": 1950,
+    "outlook_notice": "⚠ Beyond roughly {anchor_year+9}–{anchor_year+14}, this becomes illustrative scenario modeling rather than a forecast. All curves are decay/saturation-bounded — uncapped exponential extrapolation is itself a hallucination risk.",
+    "constants": {
+      "horizon_ceiling_minutes": 2000000,
+      "horizon_min_doubling_months": 2,
+      "bench_halfsat_minutes": 41,
+      "supervision_floor_pct": 3,
+      "capex_mature_growth": 0.09,
+      "invest_mature_growth": 0.09,
+      "token_mature_growth": 1.6,
+      "token_growth_decay_years": 9,
+      "water_wue_floor": 0.1
+    }
+  },
+  "anchors": {
+    "compute_growth": {
+      "label": "AI chip-stock compute growth",
+      "value": 3.4,
+      "unit": "multiplier_per_year",
+      "format": {
+        "type": "fixed",
+        "decimals": 1,
+        "suffix": "×"
+      },
+      "display": "~{v}/yr (doubling ~{doubling} mo)",
+      "source": "Epoch AI",
+      "source_url": "https://epoch.ai/",
+      "observed_at": null
+    },
+    "capex_2026": {
+      "label": "Hyperscaler capex",
+      "value": 770,
+      "unit": "USD_billion",
+      "format": {
+        "type": "round",
+        "prefix": "$",
+        "suffix": "B"
+      },
+      "display": "~{v} ({anchor_year}) → >$1T ({anchor_year+1})",
+      "source": "Epoch AI capex tracking",
+      "source_url": "https://epoch.ai/",
+      "observed_at": null
+    },
+    "enterprise_ai_adoption": {
+      "label": "Enterprise AI adoption",
+      "value": 88,
+      "unit": "percent",
+      "format": {
+        "type": "round",
+        "suffix": "%"
+      },
+      "display": "{v}",
+      "source": "Stanford HAI 2026 AI Index",
+      "source_url": "https://hai.stanford.edu/ai-index/2026-ai-index-report",
+      "observed_at": null
+    },
+    "data_center_electricity_2030": {
+      "label": "Data-center electricity (all, global)",
+      "value": 945,
+      "unit": "TWh_per_year",
+      "format": {
+        "type": "round",
+        "suffix": " TWh"
+      },
+      "display": "~{v} by 2030 (base case)",
+      "source": "IEA “Energy Demand from AI” 2026",
+      "source_url": "https://www.iea.org/reports/energy-and-ai",
+      "observed_at": null
+    },
+    "metr_doubling": {
+      "label": "METR task-horizon doubling time",
+      "value": 7,
+      "unit": "months",
+      "format": {
+        "type": "raw",
+        "suffix": " months"
+      },
+      "display": "~{v} (historical trend)",
+      "source": "METR",
+      "source_url": "https://metr.org/",
+      "observed_at": null
+    },
+    "train_flop_2026": {
+      "label": "Frontier training-run compute",
+      "value": 1e+26,
+      "unit": "FLOP",
+      "format": {
+        "type": "sci",
+        "decimals": 0,
+        "suffix": " FLOP"
+      },
+      "display": "~{v} ({anchor_year}), doubling ~5.2 mo",
+      "source": "Epoch AI Trends, Feb 2026",
+      "source_url": "https://epoch.ai/data/notable-ai-models",
+      "observed_at": null
+    },
+    "chip_capacity_2026": {
+      "label": "AI chip advanced-packaging capacity (CoWoS-class)",
+      "value": 130,
+      "unit": "thousand_wafers_per_month",
+      "format": {
+        "type": "round",
+        "suffix": "K wafers/mo"
+      },
+      "display": "~{v} by end {anchor_year}",
+      "source": "TrendForce / Morgan Stanley, Dec 2025",
+      "source_url": null,
+      "observed_at": null
+    },
+    "private_investment_2026": {
+      "label": "Global private AI investment",
+      "value": 400,
+      "unit": "USD_billion",
+      "format": {
+        "type": "round",
+        "prefix": "$",
+        "suffix": "B"
+      },
+      "display": "~{v} ({anchor_year} est.; $344.7B 2025 actual)",
+      "source": "Stanford HAI 2026 AI Index",
+      "source_url": "https://hai.stanford.edu/ai-index/2026-ai-index-report",
+      "observed_at": null
+    },
+    "energy_2026": {
+      "label": "AI electricity demand (model anchor)",
+      "value": 260,
+      "unit": "TWh_per_year",
+      "format": {
+        "type": "round",
+        "suffix": " TWh/yr"
+      },
+      "display": "~{v} (AI only, {anchor_year})",
+      "source": "Simulator anchor; review against IEA Energy and AI",
+      "source_url": "https://www.iea.org/reports/energy-and-ai",
+      "observed_at": null
+    },
+    "token_cost_2026": {
+      "label": "Blended token price (model anchor)",
+      "value": 2,
+      "unit": "USD_per_million_tokens",
+      "format": {
+        "type": "fixed",
+        "decimals": 2,
+        "prefix": "$",
+        "suffix": " per 1M tokens"
+      },
+      "display": "{v} (illustrative blended reference)",
+      "source": "Simulator anchor",
+      "source_url": null,
+      "observed_at": null
+    },
+    "task_horizon_2026": {
+      "label": "Frontier task horizon (model anchor)",
+      "value": 50,
+      "unit": "minutes",
+      "format": {
+        "type": "round",
+        "suffix": " min"
+      },
+      "display": "~{v} human-expert task length ({anchor_year})",
+      "source": "METR",
+      "source_url": "https://metr.org/",
+      "observed_at": null
+    },
+    "open_weight_lag": {
+      "label": "Open-weight lag behind closed frontier",
+      "value": 4,
+      "unit": "months",
+      "format": {
+        "type": "raw",
+        "suffix": " months"
+      },
+      "display": "~{v} (early {anchor_year})",
+      "source": "Epoch AI Brief, Jun 2026",
+      "source_url": "https://epoch.ai/",
+      "observed_at": null
+    }
+  },
+  "history_series": {
+    "compute_relative": {
+      "label": "Compute stock, relative to {anchor_year}=1×",
+      "model_series": "comp",
+      "example": {
+        "2020": 0.1,
+        "2022": 0.29,
+        "2024": 0.62
+      }
+    },
+    "capex_usd_billion": {
+      "label": "Annual hyperscaler capex, $B",
+      "model_series": "cap",
+      "example": {
+        "2020": 90,
+        "2022": 180,
+        "2024": 330
+      }
+    },
+    "energy_twh": {
+      "label": "AI electricity demand, TWh/yr",
+      "model_series": "energy",
+      "example": {
+        "2020": 30,
+        "2022": 70,
+        "2024": 140
+      }
+    },
+    "benchmark_pct": {
+      "label": "Illustrative benchmark score, %",
+      "model_series": "bench",
+      "example": {
+        "2020": 8,
+        "2022": 22,
+        "2024": 45
+      }
+    },
+    "horizon_minutes": {
+      "label": "Task horizon, human-equivalent minutes",
+      "model_series": "horizon",
+      "example": {
+        "2020": 1,
+        "2022": 4,
+        "2024": 15
+      }
+    },
+    "token_relative": {
+      "label": "Token demand, relative to {anchor_year}=1×",
+      "model_series": "tok",
+      "example": {
+        "2020": 0.00005,
+        "2022": 0.003,
+        "2024": 0.05
+      }
+    },
+    "cost_relative": {
+      "label": "Cost per token, relative to {anchor_year}=1×",
+      "model_series": "costRel",
+      "example": {
+        "2020": 140,
+        "2022": 40,
+        "2024": 10
+      }
+    },
+    "token_cost_usd_per_million": {
+      "label": "Actual blended USD cost per 1M tokens",
+      "model_series": "costUsd",
+      "example": {
+        "2020": 280,
+        "2022": 80,
+        "2024": 20
+      }
+    },
+    "train_flop_relative": {
+      "label": "Largest frontier training run, relative to {anchor_year}=1×",
+      "model_series": "train",
+      "example": {
+        "2020": 0.0003,
+        "2022": 0.006,
+        "2024": 0.12
+      }
+    },
+    "chip_capacity_kwafers": {
+      "label": "Advanced-packaging capacity, thousand wafers/month",
+      "model_series": "chip",
+      "example": {
+        "2020": 10,
+        "2022": 20,
+        "2024": 45
+      }
+    },
+    "private_investment_usd_billion": {
+      "label": "Global private AI investment, $B",
+      "model_series": "invest",
+      "example": {
+        "2020": 40,
+        "2022": 95,
+        "2024": 190
+      }
+    },
+    "capex_usd_billion_us": {
+      "label": "US capex, $B (rest-of-world is the remainder)",
+      "model_series": "capUs",
+      "example": {
+        "2020": 45,
+        "2022": 95,
+        "2024": 190
+      }
+    },
+    "capex_usd_billion_china": {
+      "label": "China capex, $B",
+      "model_series": "capCn",
+      "example": {
+        "2020": 15,
+        "2022": 30,
+        "2024": 55
+      }
+    },
+    "capex_usd_billion_eu": {
+      "label": "EU capex, $B",
+      "model_series": "capEu",
+      "example": {
+        "2020": 14,
+        "2022": 29,
+        "2024": 53
+      }
+    },
+    "water_billion_liters": {
+      "label": "Data-center water usage, billion liters",
+      "model_series": "water",
+      "example": {
+        "2020": 20,
+        "2022": 50,
+        "2024": 110
+      }
+    }
+  },
+  "historical": {
+    "compute_relative": {
+      "2020": 0.1,
+      "2022": 0.29,
+      "2024": 0.62
+    },
+    "capex_usd_billion": {
+      "2020": 90,
+      "2022": 180,
+      "2024": 330
+    },
+    "energy_twh": {
+      "2020": 30,
+      "2022": 70,
+      "2024": 140
+    },
+    "benchmark_pct": {
+      "2020": 8,
+      "2022": 22,
+      "2024": 45
+    },
+    "horizon_minutes": {
+      "2020": 1,
+      "2022": 4,
+      "2024": 15
+    },
+    "token_relative": {
+      "2020": 0.00005,
+      "2022": 0.003,
+      "2024": 0.05
+    },
+    "cost_relative": {
+      "2020": 140,
+      "2022": 40,
+      "2024": 10
+    },
+    "token_cost_usd_per_million": {
+      "2020": 280,
+      "2022": 80,
+      "2024": 20
+    },
+    "train_flop_relative": {
+      "2020": 0.0003,
+      "2022": 0.006,
+      "2024": 0.12
+    },
+    "chip_capacity_kwafers": {
+      "2020": 10,
+      "2022": 20,
+      "2024": 45
+    },
+    "private_investment_usd_billion": {
+      "2020": 40,
+      "2022": 95,
+      "2024": 190
+    },
+    "capex_usd_billion_us": {
+      "2020": 45,
+      "2022": 95,
+      "2024": 190
+    },
+    "capex_usd_billion_china": {
+      "2020": 15,
+      "2022": 30,
+      "2024": 55
+    },
+    "capex_usd_billion_eu": {
+      "2020": 14,
+      "2022": 29,
+      "2024": 53
+    },
+    "water_billion_liters": {
+      "2020": 20,
+      "2022": 50,
+      "2024": 110
+    }
+  },
+  "sliders": {
+    "computeG": {
+      "group": "Compute-stock growth",
+      "card": "card-compute",
+      "label": "Initial growth ({anchor_year})",
+      "min": 1.5,
+      "max": 5.5,
+      "step": 0.1,
+      "format": {
+        "type": "fixed",
+        "decimals": 1,
+        "suffix": "×"
+      },
+      "tip": "How fast total AI computing power is growing today. Epoch AI measures this at ~3.3–3.4×/year."
+    },
+    "computeFloor": {
+      "group": "Compute-stock growth",
+      "card": "card-compute",
+      "label": "Long-run floor rate",
+      "min": 1.05,
+      "max": 2.5,
+      "step": 0.05,
+      "format": {
+        "type": "fixed",
+        "decimals": 2,
+        "suffix": "×/yr"
+      },
+      "tip": "Minimum annual growth rate the model decays toward once capital, energy, and fabrication limits bite."
+    },
+    "computeDecay": {
+      "group": "Compute-stock growth",
+      "card": "card-compute",
+      "label": "Years to half-decay to floor",
+      "min": 3,
+      "max": 24,
+      "step": 1,
+      "format": {
+        "type": "raw"
+      },
+      "tip": "Years required for current growth to fall halfway toward the floor. Shorter means constraints bite sooner."
+    },
+    "capexComputeCoupling": {
+      "group": "Compute-stock growth",
+      "card": "card-compute",
+      "label": "Capex→compute coupling",
+      "min": 0,
+      "max": 0.3,
+      "step": 0.01,
+      "format": {
+        "type": "fixed",
+        "decimals": 2
+      },
+      "tip": "How much extra compute-stock growth each 100% of capex growth adds (e.g. 0.15 = capex growing at its {anchor_year} rate adds up to +15% to the compute growth rate). Set to 0 to make compute growth fully independent of the capex slider."
+    },
+    "capex": {
+      "group": "Hyperscaler capex",
+      "card": "card-capex",
+      "label": "{anchor_year}→{anchor_year+1} capex growth",
+      "min": 0,
+      "max": 70,
+      "step": 1,
+      "format": {
+        "type": "raw",
+        "suffix": "%"
+      },
+      "tip": "Annual growth in hyperscaler AI infrastructure spending, anchored at roughly {anchor:capex_2026} in {anchor_year}."
+    },
+    "capexDecay": {
+      "group": "Hyperscaler capex",
+      "card": "card-capex",
+      "label": "Capex growth decay rate",
+      "min": 0.02,
+      "max": 0.3,
+      "step": 0.01,
+      "format": {
+        "type": "half_life",
+        "decimals": 1,
+        "suffix": " yr half-life"
+      },
+      "tip": "How quickly annual capex growth cools toward a mature-industry pace, shown as its half-life: the number of years for the growth-rate premium above baseline to fall by half."
+    },
+    "capexCeiling": {
+      "group": "Hyperscaler capex",
+      "card": "card-capex",
+      "label": "Capex ceiling by {end_year}",
+      "min": 2000,
+      "max": 20000,
+      "step": 100,
+      "format": {
+        "type": "round",
+        "prefix": "$",
+        "suffix": "B/yr"
+      },
+      "tip": "Maximum plausible annual AI infrastructure spend by {end_year}. Prevents runaway compounding."
+    },
+    "doubling": {
+      "group": "Benchmark improvement speed",
+      "card": "card-horizon",
+      "label": "Task-horizon doubling ({anchor_year})",
+      "min": 3,
+      "max": 14,
+      "step": 0.5,
+      "format": {
+        "type": "raw",
+        "suffix": " mo"
+      },
+      "tip": "Months for AI to double the human-equivalent task duration it can reliably complete. METR historical trend: ~{anchor:metr_doubling}. Drives the horizon, benchmark, and supervision charts below."
+    },
+    "doublingDrift": {
+      "group": "Benchmark improvement speed",
+      "card": "card-horizon",
+      "label": "Doubling-time drift /decade",
+      "min": -4,
+      "max": 8,
+      "step": 0.5,
+      "format": {
+        "type": "raw",
+        "suffix": " mo"
+      },
+      "tip": "Negative accelerates progress; positive decelerates it. Zero keeps the doubling time constant."
+    },
+    "tokenGrowth": {
+      "group": "Token economics",
+      "card": "card-token",
+      "label": "Token demand growth",
+      "min": 2,
+      "max": 20,
+      "step": 0.5,
+      "format": {
+        "type": "raw",
+        "suffix": "×/yr"
+      },
+      "tip": "Annual inference token-demand growth. Epoch AI reports roughly 10×/yr demand vs 3–4×/yr supply growth."
+    },
+    "tokenCeiling": {
+      "group": "Token economics",
+      "card": "card-token",
+      "label": "Token demand ceiling by {end_year}",
+      "min": 200,
+      "max": 10000,
+      "step": 100,
+      "format": {
+        "type": "round",
+        "suffix": "×"
+      },
+      "tip": "Maximum plausible inference-volume multiple by {end_year}."
+    },
+    "costEffMult": {
+      "group": "Token economics",
+      "card": "card-token",
+      "label": "Cost decline vs efficiency",
+      "min": 0.5,
+      "max": 3,
+      "step": 0.1,
+      "format": {
+        "type": "fixed",
+        "decimals": 1,
+        "suffix": "×"
+      },
+      "tip": "How strongly $/token cost decline responds to the perf-per-watt efficiency slider (Energy & hardware limits group). 1.0 = cost falls exactly in step with hardware efficiency; higher values mean software/model efficiency adds extra cost decline on top."
+    },
+    "eff": {
+      "group": "Energy & hardware limits",
+      "card": "card-energy",
+      "label": "Perf-per-watt efficiency gain",
+      "min": 5,
+      "max": 45,
+      "step": 1,
+      "format": {
+        "type": "raw",
+        "suffix": "%/yr"
+      },
+      "tip": "Annual compute-per-watt improvement from chips, software, and algorithms. Also feeds the cost-per-token decline (scaled by the \"Cost decline vs efficiency\" slider in Token economics) and the inference-speed chart."
+    },
+    "ceiling": {
+      "group": "Energy & hardware limits",
+      "card": "card-energy",
+      "label": "AI electricity ceiling by {end_year}",
+      "min": 1500,
+      "max": 10000,
+      "step": 100,
+      "format": {
+        "type": "round",
+        "suffix": " TWh"
+      },
+      "tip": "Maximum plausible AI electricity draw by {end_year}, accounting for grid and siting constraints."
+    },
+    "limitYear": {
+      "group": "Compute-stock growth",
+      "card": "card-compute",
+      "label": "Node-scaling limit year (display only)",
+      "year_offset": true,
+      "min": 1,
+      "max": 12,
+      "step": 1,
+      "format": {
+        "type": "round"
+      },
+      "tip": "Display-only reference marker: draws the red dashed line on the Compute-stock chart at this year. It is not wired into any calculation — it does not change compute, energy, or any other curve — it is only a visual annotation for when sub-1nm node scaling is expected to plateau. Stored in data as years after the anchor year."
+    },
+    "trainG": {
+      "group": "Frontier training compute",
+      "card": "card-train",
+      "label": "Initial growth ({anchor_year})",
+      "min": 2,
+      "max": 10,
+      "step": 0.1,
+      "format": {
+        "type": "fixed",
+        "decimals": 1,
+        "suffix": "×"
+      },
+      "tip": "Annual growth in the compute used to train the single largest frontier model. Epoch AI measures the historical trend at roughly 5×/year since 2020."
+    },
+    "trainFloor": {
+      "group": "Frontier training compute",
+      "card": "card-train",
+      "label": "Long-run floor rate",
+      "min": 1.05,
+      "max": 3,
+      "step": 0.05,
+      "format": {
+        "type": "fixed",
+        "decimals": 2,
+        "suffix": "×/yr"
+      },
+      "tip": "Minimum annual training-compute growth once power, capital, and data limits bite."
+    },
+    "trainDecay": {
+      "group": "Frontier training compute",
+      "card": "card-train",
+      "label": "Years to half-decay to floor",
+      "min": 3,
+      "max": 20,
+      "step": 1,
+      "format": {
+        "type": "raw"
+      },
+      "tip": "Years for training-run compute growth to fall halfway toward the floor."
+    },
+    "trainCeiling": {
+      "group": "Frontier training compute",
+      "card": "card-train",
+      "label": "Compute ceiling by {end_year}",
+      "min": 3,
+      "max": 6,
+      "step": 0.1,
+      "format": {
+        "type": "pow10_compact",
+        "suffix": "×"
+      },
+      "tip": "Maximum plausible training-run compute growth by {end_year}, as an order of magnitude multiple of {anchor_year}. Keeps absolute FLOP values physically bounded instead of compounding without limit."
+    },
+    "openLag": {
+      "group": "Open vs. closed frontier",
+      "card": "card-open",
+      "label": "Open-weight lag ({anchor_year})",
+      "min": 0,
+      "max": 24,
+      "step": 1,
+      "format": {
+        "type": "raw",
+        "suffix": " mo"
+      },
+      "tip": "Months by which the largest open-weight model trails the closed frontier in training compute. Epoch AI Brief put this at roughly {anchor:open_weight_lag} in early {anchor_year}. Applied via fractional log-space interpolation, so sub-year lags (like 4 months) are not lost to rounding."
+    },
+    "openLagDrift": {
+      "group": "Open vs. closed frontier",
+      "card": "card-open",
+      "label": "Lag drift /decade",
+      "min": -6,
+      "max": 8,
+      "step": 0.5,
+      "format": {
+        "type": "raw",
+        "suffix": " mo"
+      },
+      "tip": "Negative narrows the open-weight gap over time; positive widens it."
+    },
+    "chipGrowth": {
+      "group": "Chip packaging capacity",
+      "card": "card-chip",
+      "label": "Annual capacity growth",
+      "min": 5,
+      "max": 70,
+      "step": 1,
+      "format": {
+        "type": "raw",
+        "suffix": "%/yr"
+      },
+      "tip": "Annual growth in advanced-packaging (CoWoS-class) capacity for AI accelerators — the tightest near-term supply bottleneck."
+    },
+    "chipCeiling": {
+      "group": "Chip packaging capacity",
+      "card": "card-chip",
+      "label": "Capacity ceiling by {end_year}",
+      "min": 300,
+      "max": 6000,
+      "step": 50,
+      "format": {
+        "type": "round",
+        "suffix": "K/mo"
+      },
+      "tip": "Maximum plausible advanced-packaging capacity by {end_year}, thousand wafers/month."
+    },
+    "investGrowth": {
+      "group": "Private AI investment",
+      "card": "card-invest",
+      "label": "{anchor_year}→{anchor_year+1} investment growth",
+      "min": 5,
+      "max": 80,
+      "step": 1,
+      "format": {
+        "type": "raw",
+        "suffix": "%"
+      },
+      "tip": "Annual growth in private capital invested into AI companies, distinct from committed hyperscaler infrastructure spend."
+    },
+    "investDecay": {
+      "group": "Private AI investment",
+      "card": "card-invest",
+      "label": "Investment growth decay rate",
+      "min": 0.02,
+      "max": 0.3,
+      "step": 0.01,
+      "format": {
+        "type": "half_life",
+        "decimals": 1,
+        "suffix": " yr half-life"
+      },
+      "tip": "How quickly annual private-investment growth cools toward a mature-industry pace, shown as its half-life: the number of years for the growth-rate premium above baseline to fall by half."
+    },
+    "investCeiling": {
+      "group": "Private AI investment",
+      "card": "card-invest",
+      "label": "Investment ceiling by {end_year}",
+      "min": 1000,
+      "max": 20000,
+      "step": 100,
+      "format": {
+        "type": "round",
+        "prefix": "$",
+        "suffix": "B/yr"
+      },
+      "tip": "Maximum plausible annual private AI investment by {end_year}."
+    },
+    "regionUsShare": {
+      "group": "Regional capex split",
+      "card": "card-capexregion",
+      "label": "US share of capex ({anchor_year})",
+      "min": 20,
+      "max": 85,
+      "step": 1,
+      "format": {
+        "type": "round",
+        "suffix": "%"
+      },
+      "tip": "Share of hyperscaler AI capex attributed to the United States in {anchor_year}. A breakdown of the capex curve above, not an independent forecast."
+    },
+    "regionUsDrift": {
+      "group": "Regional capex split",
+      "card": "card-capexregion",
+      "label": "US share drift /decade",
+      "min": -10,
+      "max": 10,
+      "step": 0.5,
+      "format": {
+        "type": "raw",
+        "suffix": "pt"
+      },
+      "tip": "Percentage-point change in US capex share per decade. Negative means other regions gain share."
+    },
+    "regionCnShare": {
+      "group": "Regional capex split",
+      "card": "card-capexregion",
+      "label": "China share of capex ({anchor_year})",
+      "min": 5,
+      "max": 50,
+      "step": 1,
+      "format": {
+        "type": "round",
+        "suffix": "%"
+      },
+      "tip": "Share of hyperscaler AI capex attributed to China in {anchor_year}."
+    },
+    "regionCnDrift": {
+      "group": "Regional capex split",
+      "card": "card-capexregion",
+      "label": "China share drift /decade",
+      "min": -10,
+      "max": 15,
+      "step": 0.5,
+      "format": {
+        "type": "raw",
+        "suffix": "pt"
+      },
+      "tip": "Percentage-point change in China capex share per decade."
+    },
+    "regionEuShare": {
+      "group": "Regional capex split",
+      "card": "card-capexregion",
+      "label": "EU share of capex ({anchor_year})",
+      "min": 5,
+      "max": 40,
+      "step": 1,
+      "format": {
+        "type": "round",
+        "suffix": "%"
+      },
+      "tip": "Share of hyperscaler AI capex attributed to the EU in {anchor_year}."
+    },
+    "regionEuDrift": {
+      "group": "Regional capex split",
+      "card": "card-capexregion",
+      "label": "EU share drift /decade",
+      "min": -10,
+      "max": 15,
+      "step": 0.5,
+      "format": {
+        "type": "raw",
+        "suffix": "pt"
+      },
+      "tip": "Percentage-point change in EU capex share per decade."
+    },
+    "waterWue": {
+      "group": "Water usage",
+      "card": "card-water",
+      "label": "Water-usage effectiveness",
+      "min": 0.3,
+      "max": 5,
+      "step": 0.1,
+      "format": {
+        "type": "fixed",
+        "decimals": 1,
+        "suffix": " L/kWh"
+      },
+      "tip": "Liters of water per kWh of data-center electricity. Industry figures typically range ~0.3–5 L/kWh depending on cooling method and climate."
+    },
+    "waterEff": {
+      "group": "Water usage",
+      "card": "card-water",
+      "label": "WUE improvement",
+      "min": 0,
+      "max": 10,
+      "step": 0.5,
+      "format": {
+        "type": "raw",
+        "suffix": "%/yr"
+      },
+      "tip": "Annual improvement in water-usage effectiveness from better cooling technology."
+    }
+  },
+  "scenarios": {
+    "optimistic": {
+      "button": "Optimist",
+      "label": "Optimistic",
+      "color": "opt",
+      "tip": "Sets every slider to a fast-progress preset: quicker compute/training growth, faster cost declines, shorter capability doubling times, and higher ceilings across all charts. A bullish trajectory, not a guaranteed outcome.",
+      "params": {
+        "computeG": 4.2,
+        "computeFloor": 1.9,
+        "computeDecay": 16,
+        "capexComputeCoupling": 0.15,
+        "capex": 45,
+        "capexDecay": 0.06,
+        "capexCeiling": 12000,
+        "doubling": 5,
+        "doublingDrift": -2,
+        "eff": 32,
+        "ceiling": 6500,
+        "limitYear": 9,
+        "tokenGrowth": 13,
+        "tokenCeiling": 5000,
+        "costEffMult": 1.3,
+        "trainG": 6.5,
+        "trainFloor": 2,
+        "trainDecay": 14,
+        "trainCeiling": 5.3,
+        "openLag": 2,
+        "openLagDrift": -3,
+        "chipGrowth": 45,
+        "chipCeiling": 4000,
+        "investGrowth": 45,
+        "investDecay": 0.06,
+        "investCeiling": 12000,
+        "regionUsShare": 55,
+        "regionUsDrift": -6,
+        "regionCnShare": 18,
+        "regionCnDrift": 8,
+        "regionEuShare": 16,
+        "regionEuDrift": 2,
+        "waterWue": 1.1,
+        "waterEff": 5
+      }
+    },
+    "baseline": {
+      "button": "Baseline",
+      "label": "Baseline",
+      "color": "base",
+      "tip": "Sets every slider to the simulator's default, middle-of-the-road preset — anchored to today's measured rates (e.g. ~{anchor:compute_growth}/yr compute growth, ~{anchor:metr_doubling} task-horizon doubling) decaying toward typical long-run limits. The best-guess starting point.",
+      "params": {
+        "computeG": 3.4,
+        "computeFloor": 1.4,
+        "computeDecay": 10,
+        "capexComputeCoupling": 0.15,
+        "capex": 32,
+        "capexDecay": 0.1,
+        "capexCeiling": 6000,
+        "doubling": 7,
+        "doublingDrift": 0,
+        "eff": 25,
+        "ceiling": 4000,
+        "limitYear": 5,
+        "tokenGrowth": 10,
+        "tokenCeiling": 2000,
+        "costEffMult": 1.3,
+        "trainG": 5,
+        "trainFloor": 1.6,
+        "trainDecay": 9,
+        "trainCeiling": 4.7,
+        "openLag": 4,
+        "openLagDrift": 0,
+        "chipGrowth": 30,
+        "chipCeiling": 2000,
+        "investGrowth": 28,
+        "investDecay": 0.11,
+        "investCeiling": 5000,
+        "regionUsShare": 55,
+        "regionUsDrift": -3,
+        "regionCnShare": 18,
+        "regionCnDrift": 4,
+        "regionEuShare": 16,
+        "regionEuDrift": 1,
+        "waterWue": 1.8,
+        "waterEff": 2
+      }
+    },
+    "pessimistic": {
+      "button": "Pessimist",
+      "label": "Pessimistic",
+      "color": "pess",
+      "tip": "Sets every slider to a slow-progress preset: slower compute/training growth, slower cost declines, longer capability doubling times, and lower ceilings across all charts. A bearish trajectory, not a worst-case floor.",
+      "params": {
+        "computeG": 2.6,
+        "computeFloor": 1.15,
+        "computeDecay": 5,
+        "capexComputeCoupling": 0.15,
+        "capex": 18,
+        "capexDecay": 0.18,
+        "capexCeiling": 2500,
+        "doubling": 9,
+        "doublingDrift": 4,
+        "eff": 15,
+        "ceiling": 2200,
+        "limitYear": 2,
+        "tokenGrowth": 6,
+        "tokenCeiling": 700,
+        "costEffMult": 1.3,
+        "trainG": 3.5,
+        "trainFloor": 1.2,
+        "trainDecay": 5,
+        "trainCeiling": 4,
+        "openLag": 8,
+        "openLagDrift": 4,
+        "chipGrowth": 15,
+        "chipCeiling": 800,
+        "investGrowth": 12,
+        "investDecay": 0.2,
+        "investCeiling": 1800,
+        "regionUsShare": 55,
+        "regionUsDrift": 1,
+        "regionCnShare": 18,
+        "regionCnDrift": 1,
+        "regionEuShare": 16,
+        "regionEuDrift": 0,
+        "waterWue": 2.6,
+        "waterEff": 0.5
+      }
+    }
+  },
+  "default_scenario": "baseline",
+  "milestones": {
+    "columns": [
+      "Milestone (human task length)",
+      "Year",
+      "Confidence"
+    ],
+    "items": [
+      {
+        "label": "1 hour (60 min)",
+        "minutes": 60
+      },
+      {
+        "label": "1 workday (~480 min)",
+        "minutes": 480
+      },
+      {
+        "label": "1 work-week (~2400 min)",
+        "minutes": 2400
+      },
+      {
+        "label": "1 work-month (~9600 min)",
+        "minutes": 9600
+      },
+      {
+        "label": "1 work-year (~120000 min)",
+        "minutes": 120000
+      }
+    ],
+    "confidence_bands": [
+      {
+        "max_years_out": 4,
+        "label": "Near-term extrapolation"
+      },
+      {
+        "max_years_out": 14,
+        "label": "Medium-confidence scenario"
+      },
+      {
+        "max_years_out": null,
+        "label": "Speculative, low confidence"
+      }
+    ],
+    "not_reached_label": "Not reached in selected range"
+  },
+  "tables": {
+    "card-hardware": {
+      "columns": [
+        "Constraint",
+        "Approx. timing",
+        "Why it matters"
+      ],
+      "rows": [
+        [
+          "Sub-1nm node scaling plateau",
+          "Your marker: {param:limitYear} (industry range ~2028–2035; display-only, not wired into the model)",
+          "Geometric transistor shrinking loses economic payoff; gains shift to packaging and architecture."
+        ],
+        [
+          "Memory bandwidth wall",
+          "Tightening through 2030s",
+          "Model/context growth is increasingly bottlenecked by bandwidth, not raw FLOPs."
+        ],
+        [
+          "Advanced packaging & interconnect capacity",
+          "Near-term",
+          "Supply constraint independent of fab-node progress."
+        ],
+        [
+          "Power density per rack",
+          "Now through 2030",
+          "Liquid cooling and deployment capacity gate expansion."
+        ],
+        [
+          "Grid interconnection queues",
+          "Multi-year lag",
+          "Power access is often gated by permitting and interconnection queues."
+        ]
+      ]
+    },
+    "card-reference": {
+      "columns": [
+        "Source",
+        "Estimate",
+        "Type"
+      ],
+      "rows": [
+        [
+          "Frontier lab leaders (public statements)",
+          "~2026–2028",
+          "Single-source, optimistic"
+        ],
+        [
+          "Metaculus forecasting community",
+          "~25% by 2029, ~50% by 2033",
+          "Aggregated community forecast"
+        ],
+        [
+          "Expert Survey on Progress in AI / LEAP panel",
+          "Median ~2047–2050",
+          "Academic/expert survey"
+        ],
+        [
+          "Prominent skeptics",
+          "2035+ / disputes near-term feasibility",
+          "Contrarian expert view"
+        ]
+      ]
+    }
+  },
+  "cards": {
+    "card-anchors": {
+      "title": "Live data anchors",
+      "tip": "The real, current data points this simulator is calibrated against. Check these before trusting any projection. All values are curatable via Import or the refresh button.",
+      "sub": "Sourced figures every default and slider range is built from."
+    },
+    "card-compute": {
+      "title": "Compute stock",
+      "tip": "Projects total AI computing power over time, decaying toward a sustainable growth floor instead of continuing exponentially forever. The red dashed line is a display-only reference marker for your node-scaling limit year — it annotates the chart but does not itself alter the curve.",
+      "sub": "Relative to {anchor_year} = 1×, log scale."
+    },
+    "card-parallel": {
+      "title": "Parallel task capacity",
+      "tip": "How many task instances could plausibly run at once, assuming cost per parallel instance stays roughly constant so capacity tracks total compute stock. A rough capacity proxy, not a scheduling or orchestration model.",
+      "sub": "Concurrent task-instance capacity, relative to {anchor_year} = 1×, log scale."
+    },
+    "card-energy": {
+      "title": "Electricity demand",
+      "tip": "Projects electricity demand from AI compute, bounded by grid, siting, and policy constraints. Anchor: ~{anchor:energy_2026} in {anchor_year}. IEA’s ~{anchor:data_center_electricity_2030} 2030 figure applies to all global data centers, not AI alone.",
+      "sub": "Electricity demand for AI compute, TWh/yr."
+    },
+    "card-water": {
+      "title": "Data-center water usage",
+      "tip": "Derived from the electricity chart above via a water-usage-effectiveness (WUE) ratio, which can improve over time with better cooling. Industry WUE figures typically range ~0.3–5 L/kWh depending on cooling method and climate.",
+      "sub": "Water consumed for AI data-center cooling, billion liters/yr."
+    },
+    "card-token": {
+      "title": "Tokens vs cost",
+      "tip": "Compares token demand against declining unit cost. Absolute USD price uses an editable {anchor_year} blended reference price ({anchor:token_cost_2026}); it is an illustrative anchor, not a universal market price. 'Inference spend' is demand × unit cost as a relative index ({anchor_year}=1×) — it is not a dollar figure.",
+      "sub": "Relative demand, unit cost, projected USD cost per 1M tokens, and a relative inference-spend index."
+    },
+    "card-speed": {
+      "title": "Inference speed / efficiency",
+      "tip": "Derived as the inverse of the token cost-decline curve: as $/token falls, effective throughput per dollar rises. An efficiency proxy, not a measured tokens-per-second latency benchmark — actual wall-clock execution time also depends on runtime and hardware factors this simulator does not model.",
+      "sub": "Efficiency-driven throughput proxy, relative to {anchor_year} = 1×, log scale."
+    },
+    "card-train": {
+      "title": "Frontier training-run compute",
+      "tip": "Compute used to train the single largest frontier model — distinct from the total AI chip-stock compute above. Anchor: ~{anchor:train_flop_2026} in {anchor_year}, historically growing ~5×/year (Epoch AI Trends).",
+      "sub": "Largest single training run, relative to {anchor_year} = 1×, log scale."
+    },
+    "card-open": {
+      "title": "Open-weight vs. closed frontier",
+      "tip": "Models open-weight training compute as the closed frontier curve above, delayed by a lag that can widen or narrow. Anchor: ~{anchor:open_weight_lag} lag in early {anchor_year} (Epoch AI Brief, Jun 2026). A simplified lag model, not an independent forecast.",
+      "sub": "Your settings only: training compute, closed frontier vs. open-weight, relative to {anchor_year} = 1×, log scale."
+    },
+    "card-chip": {
+      "title": "AI chip packaging capacity",
+      "tip": "Advanced-packaging (CoWoS-class) capacity — the tightest near-term bottleneck on shipping AI accelerators, distinct from raw wafer starts. Anchor: ~{anchor:chip_capacity_2026} by end of {anchor_year} (TrendForce / Morgan Stanley reporting).",
+      "sub": "Advanced-packaging capacity for AI accelerators, thousand wafers/month."
+    },
+    "card-invest": {
+      "title": "Private AI investment",
+      "tip": "Private capital into AI companies — distinct from hyperscaler capex, which is committed infrastructure spend. Anchor: ~{anchor:private_investment_2026} in {anchor_year}, extrapolated from $344.7B in 2025 (Stanford HAI 2026 AI Index).",
+      "sub": "Global private investment into AI companies, $B/yr."
+    },
+    "card-capex": {
+      "title": "Hyperscaler capex",
+      "tip": "Projects hyperscaler AI infrastructure spending, bounded by a plausible ceiling rather than compounding forever. Anchor: ~{anchor:capex_2026} in {anchor_year}, or an imported override.",
+      "sub": "Annual capital expenditure, $B/yr."
+    },
+    "card-capexregion": {
+      "title": "Capex by region",
+      "tip": "An illustrative split of the hyperscaler capex curve above by region. Shares and their drift are set by sliders, not independently forecast per region — this is a breakdown, not a separate model.",
+      "sub": "Your settings only: hyperscaler capex split by region, $B/yr."
+    },
+    "card-horizon": {
+      "title": "Task-horizon capability",
+      "tip": "METR-style task horizon: the human-expert time a task would require, not wall-clock execution time. It does not say an AI works continuously for that duration. Anchor: ~{anchor:task_horizon_2026} in {anchor_year}. The long-range curve is bounded to avoid physically meaningless exponential values.",
+      "sub": "Human-equivalent task length AI can reliably complete, minutes, log scale."
+    },
+    "card-benchmark": {
+      "title": "Benchmark saturation",
+      "tip": "Illustrative capability-benchmark score (0–100%), modeled on the rapid-saturation pattern of benchmarks such as SWE-bench. It is not a named benchmark.",
+      "sub": "Illustrative capability-benchmark score, 0–100%."
+    },
+    "card-supervision": {
+      "title": "Supervision burden",
+      "tip": "Modeled as 100% minus benchmark saturation, with a floor since some human oversight, verification, or governance is assumed to persist. Tied directly to the benchmark curve above, not an independent human-factors study. Real-world approvals, physical experiments, and external feedback loops are paced by the outside world rather than AI capability, so they are intentionally left out of this simulator.",
+      "sub": "Estimated share of output still needing human checking or correction, %."
+    },
+    "card-hardware": {
+      "title": "Hardware & physical limits",
+      "tip": "Key physical and manufacturing constraints that could bend the compute-growth curve, independent of demand or capital. Qualitative reference only.",
+      "sub": "Physical and manufacturing constraints on compute growth."
+    },
+    "card-milestones": {
+      "title": "Projected task-horizon milestones",
+      "tip": "These are human-equivalent task lengths, not claims that an AI works in real time for the listed duration or compresses them into a fixed number of hours.",
+      "sub": "Year each human-equivalent task-length milestone is projected to be crossed."
+    },
+    "card-reference": {
+      "title": "Expert forecast dispersion",
+      "tip": "Named external forecasts for calibration. The wide spread is the finding; the simulator should not be mistaken for a consensus AGI-date predictor.",
+      "sub": "Named external AGI-timeline forecasts, for calibration."
+    }
+  },
+  "refresh_sources": [
+    {
+      "id": "curated",
+      "type": "dataset_json",
+      "url": "./data/curated_metrics.json",
+      "enabled": true,
+      "note": "Same-origin curated file (any partial dataset in this schema). Requires serving over http(s), not file://."
+    },
+    {
+      "id": "epochModels",
+      "type": "epoch_models_csv",
+      "url": "https://epoch.ai/data/all_ai_models.csv",
+      "enabled": false,
+      "note": "Browser fetch is usually blocked by CORS; point at a same-origin proxy to enable."
+    },
+    {
+      "id": "epochDataCenters",
+      "type": "epoch_data_centers_csv",
+      "url": "https://epoch.ai/data/data_centers/data_centers.csv",
+      "enabled": false,
+      "note": "Browser fetch is usually blocked by CORS; point at a same-origin proxy to enable."
+    }
+  ]
+}
