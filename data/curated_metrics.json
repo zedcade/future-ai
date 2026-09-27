@@ -3,7 +3,7 @@
   "description": "Curated overlay read by the refresh button (⟳). Same schema as future_ai_import_template.json: include any section (anchors, model, sliders, scenarios, milestones, tables, cards, history_series, historical) and only the keys you want to curate. Each differing value is shown for review before it is applied. Anchor ids must match the simulator's (see the template); unknown ids become new reference rows in the anchors table.",
   "anchors": {
     "compute_growth": { "value": 3.4, "unit": "multiplier_per_year", "source": "Epoch AI", "source_url": "https://epoch.ai/" },
-    "capex_2026": { "value": 820, "unit": "USD_billion", "source": "Epoch AI capex tracking", "source_url": "https://epoch.ai/", "observed_at": "2026-01-01" },
+    "capex_2026": { "value": 770, "unit": "USD_billion", "source": "Epoch AI capex tracking", "source_url": "https://epoch.ai/", "observed_at": "2026-01-01" },
     "enterprise_ai_adoption": { "value": 88, "unit": "percent", "source": "Stanford HAI 2026 AI Index", "source_url": "https://hai.stanford.edu/ai-index/2026-ai-index-report" },
     "data_center_electricity_2030": { "value": 945, "unit": "TWh_per_year", "source": "IEA “Energy Demand from AI” 2026", "source_url": "https://www.iea.org/reports/energy-and-ai" },
     "metr_doubling": { "value": 7, "unit": "months", "source": "METR", "source_url": "https://metr.org/" },
